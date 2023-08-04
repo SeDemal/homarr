@@ -27,19 +27,21 @@ import { IntegrationOptionsValueType } from '../WidgetsEditModal';
 import { InfoCard } from '~/components/InfoCard/InfoCard';
 
 type LocationSelectionProps = {
-  widgetId: string;
+  display?: string;
+  info?: boolean;
   propName: string;
   value: any;
+  widgetId: string;
   handleChange: (key: string, value: IntegrationOptionsValueType) => void;
-  info?: boolean;
 };
 
 export const LocationSelection = ({
-  widgetId,
+  display,
+  info,
   propName: key,
   value,
+  widgetId,
   handleChange,
-  info,
 }: LocationSelectionProps) => {
   const { t } = useTranslation('widgets/location');
   const [query, setQuery] = useState(value.name ?? '');
@@ -59,7 +61,7 @@ export const LocationSelection = ({
 
   return (
     <>
-      <Card>
+      <Card display={display?? undefined}>
         <Stack spacing="xs">
           <Flex direction="row" justify="space-between" wrap="nowrap">
             <Title order={5}>{t(`modules/${widgetId}:descriptor.settings.${key}.label`)}</Title>

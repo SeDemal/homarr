@@ -15,6 +15,9 @@ const definition = defineWidget({
     display24HourFormat: {
       type: 'switch',
       defaultValue: false,
+      info: true,
+      togglable: true,
+      defaultToggle: false,
     },
   },
   gridstack: {
@@ -34,7 +37,7 @@ interface DateTileProps {
 
 function DateTile({ widget }: DateTileProps) {
   const date = useDateState();
-  const formatString = widget.properties.display24HourFormat ? 'HH:mm' : 'h:mm A';
+  const formatString = widget.toggled.display24HourFormat && widget.properties.display24HourFormat ? 'HH:mm' : 'h:mm A';
   const { width, ref } = useElementSize();
 
   return (

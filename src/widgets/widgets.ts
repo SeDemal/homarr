@@ -21,6 +21,11 @@ export type IWidget<TKey extends string, TDefinition extends IWidgetDefinition> 
       TDefinition['options'][key]['defaultValue']
     >;
   };
+  toggled: {
+    [key in keyof TDefinition['options']]: MakeLessSpecific<
+      TDefinition['options'][key]['defaultToggle']
+    >;
+  }
   area: AreaType;
   shape: ShapeType;
 };
@@ -50,8 +55,10 @@ interface DataType {
   value: string;
 }
 
-interface  ICommonWidgetOptions {
+export interface  ICommonWidgetOptions {
   info?: boolean;
+  togglable?: boolean;
+  defaultToggle?: boolean;
 };
 
 // will show a multi-select with specified data

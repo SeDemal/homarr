@@ -136,109 +136,186 @@ const WidgetOptionTypeSwitch: FC<{
 }> = ({ option, widgetId, propName: key, value, handleChange }) => {
   const { t } = useTranslation([`modules/${widgetId}`, 'common']);
   const info = option.info ?? false;
+  const toggleOpt = option.togglable ?? false;
+  const toggleDefault = option.defaultToggle ?? false;
+  const [checked, setChecked] = useState(toggleDefault);
 
   switch (option.type) {
     case 'switch':
       return (
-        <Group align="center" spacing="sm">
+        <Stack>
+          <Group display={toggleOpt? undefined : "none"}>
           <Switch
-            label={t(`descriptor.settings.${key}.label`)}
-            checked={value as boolean}
-            onChange={(ev) => handleChange(key, ev.currentTarget.checked)}
-            {...option.inputProps}
+            checked={checked}
+            onChange={ev => setChecked(ev.currentTarget.checked)}
+            label={t(`descriptor.settings.${key}.toggle`)}
           />
-          {info && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
-        </Group>
+          {info && toggleOpt && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
+          </Group>
+          <Group align="center" spacing="sm" display={!toggleOpt || checked ? undefined : "none"}>
+            <Switch
+              label={t(`descriptor.settings.${key}.label`)}
+              checked={value as boolean}
+              onChange={(ev) => handleChange(key, ev.currentTarget.checked)}
+              {...option.inputProps}
+            />
+            {info && !toggleOpt && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
+          </Group>
+        </Stack>
       );
     case 'text':
       return (
-        <Stack spacing={0}>
-          <Group align="center" spacing="sm">
-            <Text size="0.875rem" weight="500">{t(`descriptor.settings.${key}.label`)}</Text>
-            {info && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
-          </Group>
-          <TextInput
-            value={value as string}
-            onChange={(ev) => handleChange(key, ev.currentTarget.value)}
-            {...option.inputProps}
+        <Stack>
+          <Group display={toggleOpt? undefined : "none"}>
+          <Switch
+            checked={checked}
+            onChange={ev => {
+              setChecked(ev.currentTarget.checked);
+              //handleChange(key, ev.currentTarget.value);
+            }}
+            label={t(`descriptor.settings.${key}.toggle`)}
           />
+          {info && toggleOpt && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
+          </Group>
+          <Stack spacing={0} display={!toggleOpt || checked ? undefined : "none"}>
+            <Group align="center" spacing="sm">
+              <Text size="0.875rem" weight="500">{t(`descriptor.settings.${key}.label`)}</Text>
+              {info && !toggleOpt && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
+            </Group>
+            <TextInput
+              value={value as string}
+              onChange={(ev) => handleChange(key, ev.currentTarget.value)}
+              {...option.inputProps}
+            />
+          </Stack>
         </Stack>
       );
     case 'multi-select':
       return (
-        <Stack spacing={0}>
-          <Group align="center" spacing="sm">
-            <Text size="0.875rem" weight="500">{t(`descriptor.settings.${key}.label`)}</Text>
-            {info && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
-          </Group>
-          <MultiSelect
-            data={option.data}
-            value={value as string[]}
-            defaultValue={option.defaultValue}
-            onChange={(v) => handleChange(key, v)}
-            withinPortal
-            {...option.inputProps}
+        <Stack>
+          <Group display={toggleOpt? undefined : "none"}>
+          <Switch
+            checked={checked}
+            onChange={ev => setChecked(ev.currentTarget.checked)}
+            label={t(`descriptor.settings.${key}.toggle`)}
           />
+          {info && toggleOpt && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
+          </Group>
+          <Stack spacing={0} display={!toggleOpt || checked ? undefined : "none"}>
+            <Group align="center" spacing="sm">
+              <Text size="0.875rem" weight="500">{t(`descriptor.settings.${key}.label`)}</Text>
+              {info && !toggleOpt && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
+            </Group>
+            <MultiSelect
+              data={option.data}
+              value={value as string[]}
+              defaultValue={option.defaultValue}
+              onChange={(v) => handleChange(key, v)}
+              withinPortal
+              {...option.inputProps}
+            />
+          </Stack>
         </Stack>
       );
     case 'select':
       return (
-        <Stack spacing={0}>
-          <Group align="center" spacing="sm">
-            <Text size="0.875rem" weight="500">{t(`descriptor.settings.${key}.label`)}</Text>
-            {info && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
-          </Group>
-          <Select
-            defaultValue={option.defaultValue}
-            data={option.data}
-            value={value as string}
-            onChange={(v) => handleChange(key, v ?? option.defaultValue)}
-            withinPortal
-            {...option.inputProps}
+        <Stack>
+          <Group display={toggleOpt? undefined : "none"}>
+          <Switch
+            checked={checked}
+            onChange={ev => setChecked(ev.currentTarget.checked)}
+            label={t(`descriptor.settings.${key}.toggle`)}
           />
+          {info && toggleOpt && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
+          </Group>
+          <Stack spacing={0} display={!toggleOpt || checked ? undefined : "none"}>
+            <Group align="center" spacing="sm">
+              <Text size="0.875rem" weight="500">{t(`descriptor.settings.${key}.label`)}</Text>
+              {info && !toggleOpt && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
+            </Group>
+            <Select
+              defaultValue={option.defaultValue}
+              data={option.data}
+              value={value as string}
+              onChange={(v) => handleChange(key, v ?? option.defaultValue)}
+              withinPortal
+              {...option.inputProps}
+            />
+          </Stack>
         </Stack>
       );
     case 'number':
       return (
-        <Stack spacing={0}>
-          <Group align="center" spacing="sm">
-            <Text size="0.875rem" weight="500">{t(`descriptor.settings.${key}.label`)}</Text>
-            {info && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
-          </Group>
-          <NumberInput
-            value={value as number}
-            onChange={(v) => handleChange(key, v!)}
-            {...option.inputProps}
+        <Stack>
+          <Group display={toggleOpt? undefined : "none"}>
+          <Switch
+            checked={checked}
+            onChange={ev => setChecked(ev.currentTarget.checked)}
+            label={t(`descriptor.settings.${key}.toggle`)}
           />
+          {info && toggleOpt && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
+          </Group>
+          <Stack spacing={0} display={!toggleOpt || checked ? undefined : "none"}>
+            <Group align="center" spacing="sm">
+              <Text size="0.875rem" weight="500">{t(`descriptor.settings.${key}.label`)}</Text>
+              {info && !toggleOpt && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
+            </Group>
+            <NumberInput
+              value={value as number}
+              onChange={(v) => handleChange(key, v!)}
+              {...option.inputProps}
+            />
+          </Stack>
         </Stack>
       );
     case 'slider':
       return (
-        <Stack spacing={0}>
-          <Group align="center" spacing="sm">
-            <Text size="0.875rem" weight="500">{t(`descriptor.settings.${key}.label`)}</Text>
-            {info && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
-          </Group>
-          <Slider
-            label={value}
-            value={value as number}
-            min={option.min}
-            max={option.max}
-            step={option.step}
-            onChange={(v) => handleChange(key, v)}
-            {...option.inputProps}
+        <Stack>
+          <Group display={toggleOpt? undefined : "none"}>
+          <Switch
+            checked={checked}
+            onChange={ev => setChecked(ev.currentTarget.checked)}
+            label={t(`descriptor.settings.${key}.toggle`)}
           />
+          {info && toggleOpt && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
+          </Group>
+          <Stack spacing={0} display={!toggleOpt || checked ? undefined : "none"}>
+            <Group align="center" spacing="sm">
+              <Text size="0.875rem" weight="500">{t(`descriptor.settings.${key}.label`)}</Text>
+              {info && !toggleOpt && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
+            </Group>
+            <Slider
+              label={value}
+              value={value as number}
+              min={option.min}
+              max={option.max}
+              step={option.step}
+              onChange={(v) => handleChange(key, v)}
+              {...option.inputProps}
+            />
+          </Stack>
         </Stack>
       );
     case 'location':
       return (
-        <LocationSelection
-          propName={key}
-          value={value}
-          handleChange={handleChange}
-          widgetId={widgetId}
-          info={info}
-        />
+        <Stack>
+          <Group display={toggleOpt? undefined : "none"}>
+          <Switch
+            checked={checked}
+            onChange={ev => setChecked(ev.currentTarget.checked)}
+            label={t(`descriptor.settings.${key}.toggle`)}
+          />
+          {info && toggleOpt && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
+          </Group>
+          <LocationSelection
+            display={!toggleOpt || checked ? undefined : "none"}
+            propName={key}
+            value={value}
+            handleChange={handleChange}
+            widgetId={widgetId}
+            info={info && !toggleOpt}
+          />
+        </Stack>
       );
 
     case 'draggable-list':
@@ -265,98 +342,128 @@ const WidgetOptionTypeSwitch: FC<{
         );
 
       return (
-        <Stack spacing="xs">
-          <Group align="center" spacing="sm">
-            <Text>{t(`descriptor.settings.${key}.label`)}</Text>
-            {info && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
+        <Stack>
+          <Group display={toggleOpt? undefined : "none"}>
+          <Switch
+            checked={checked}
+            onChange={ev => setChecked(ev.currentTarget.checked)}
+            label={t(`descriptor.settings.${key}.toggle`)}
+          />
+          {info && toggleOpt && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
           </Group>
-          <StaticDraggableList
-            value={typedVal}
-            onChange={(v) => handleChange(key, v)}
-            labels={mapObject(option.items, (liName) =>
-              t(`descriptor.settings.${key}.${liName}.label`)
-            )}
-          >
-            {mapObject(option.items, (liName, liSettings) =>
-              Object.entries(liSettings).map(([settingName, setting], i) => (
-                <WidgetOptionTypeSwitch
-                  key={`${liName}.${settingName}.${i}`}
-                  option={setting as IWidgetOptionValue}
-                  widgetId={widgetId}
-                  propName={`${key}.${liName}.${settingName}`}
-                  value={extractSubValue(liName, settingName)}
-                  handleChange={handleSubChange(liName, settingName)}
-                />
-              ))
-            )}
-          </StaticDraggableList>
+          <Stack spacing="xs" display={!toggleOpt || checked ? undefined : "none"}>
+            <Group align="center" spacing="sm">
+              <Text>{t(`descriptor.settings.${key}.label`)}</Text>
+              {info && !toggleOpt && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
+            </Group>
+            <StaticDraggableList
+              value={typedVal}
+              onChange={(v) => handleChange(key, v)}
+              labels={mapObject(option.items, (liName) =>
+                t(`descriptor.settings.${key}.${liName}.label`)
+              )}
+            >
+              {mapObject(option.items, (liName, liSettings) =>
+                Object.entries(liSettings).map(([settingName, setting], i) => (
+                  <WidgetOptionTypeSwitch
+                    key={`${liName}.${settingName}.${i}`}
+                    option={setting as IWidgetOptionValue}
+                    widgetId={widgetId}
+                    propName={`${key}.${liName}.${settingName}`}
+                    value={extractSubValue(liName, settingName)}
+                    handleChange={handleSubChange(liName, settingName)}
+                  />
+                ))
+              )}
+            </StaticDraggableList>
+          </Stack>
         </Stack>
       );
     case 'multiple-text':
       return (
-        <Stack spacing={0}>
-          <Group align="center" spacing="sm">
-            <Text size="0.875rem" weight="500">{t(`descriptor.settings.${key}.label`)}</Text>
-            {info && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
-          </Group>
-          <MultiSelect
-            data={value.map((name: any) => ({ value: name, label: name }))}
-            description={t(`descriptor.settings.${key}.description`)}
-            defaultValue={value as string[]}
-            withinPortal
-            searchable
-            creatable
-            getCreateLabel={(query) => t('common:createItem', { item: query })}
-            onChange={(values) =>
-              handleChange(
-                key,
-                values.map((item: string) => item)
-              )
-            }
+        <Stack>
+          <Group display={toggleOpt? undefined : "none"}>
+          <Switch
+            checked={checked}
+            onChange={ev => setChecked(ev.currentTarget.checked)}
+            label={t(`descriptor.settings.${key}.toggle`)}
           />
+          {info && toggleOpt && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
+          </Group>
+          <Stack spacing={0} display={!toggleOpt || checked ? undefined : "none"}>
+            <Group align="center" spacing="sm">
+              <Text size="0.875rem" weight="500">{t(`descriptor.settings.${key}.label`)}</Text>
+              {info && !toggleOpt && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
+            </Group>
+            <MultiSelect
+              data={value.map((name: any) => ({ value: name, label: name }))}
+              description={t(`descriptor.settings.${key}.description`)}
+              defaultValue={value as string[]}
+              withinPortal
+              searchable
+              creatable
+              getCreateLabel={(query) => t('common:createItem', { item: query })}
+              onChange={(values) =>
+                handleChange(
+                  key,
+                  values.map((item: string) => item)
+                )
+              }
+            />
+          </Stack>
         </Stack>
       );
     case 'draggable-editable-list':
       const { t: translateDraggableList } = useTranslation('widgets/draggable-list');
       return (
-        <Stack spacing="xs">
-          <Group align="center" spacing="sm">
-            <Text>{t(`descriptor.settings.${key}.label`)}</Text>
-            {info && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
-          </Group>
-          <DraggableList
-            items={Array.from(value).map((v: any) => ({
-              data: v,
-            }))}
-            value={value}
-            onChange={(v) => handleChange(key, v)}
-            options={option}
+        <Stack>
+          <Group display={toggleOpt? undefined : "none"}>
+          <Switch
+            checked={checked}
+            onChange={ev => setChecked(ev.currentTarget.checked)}
+            label={t(`descriptor.settings.${key}.toggle`)}
           />
+          {info && toggleOpt && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
+          </Group>
+          <Stack spacing="xs" display={!toggleOpt || checked ? undefined : "none"}>
+            <Group align="center" spacing="sm">
+              <Text>{t(`descriptor.settings.${key}.label`)}</Text>
+              {info && !toggleOpt && <InfoCard content={t(`descriptor.settings.${key}.info`)}/>}
+            </Group>
+            <DraggableList
+              items={Array.from(value).map((v: any) => ({
+                data: v,
+              }))}
+              value={value}
+              onChange={(v) => handleChange(key, v)}
+              options={option}
+            />
 
-          {Array.from(value).length === 0 && (
-            <Card>
-              <Stack align="center">
-                <IconPlaylistX size="2rem" />
-                <Stack align="center" spacing={0}>
-                  <Title order={5}>{translateDraggableList('noEntries.title')}</Title>
-                  <Text>{translateDraggableList('noEntries.text')}</Text>
+            {Array.from(value).length === 0 && (
+              <Card>
+                <Stack align="center">
+                  <IconPlaylistX size="2rem" />
+                  <Stack align="center" spacing={0}>
+                    <Title order={5}>{translateDraggableList('noEntries.title')}</Title>
+                    <Text>{translateDraggableList('noEntries.text')}</Text>
+                  </Stack>
                 </Stack>
-              </Stack>
-            </Card>
-          )}
+              </Card>
+            )}
 
-          <Flex gap="md">
-            <Button
-              onClick={() => {
-                handleChange('items', [...value, option.create()]);
-              }}
-              leftIcon={<IconPlus size={16} />}
-              variant="default"
-              fullWidth
-            >
-              {translateDraggableList('buttonAdd')}
-            </Button>
-          </Flex>
+            <Flex gap="md">
+              <Button
+                onClick={() => {
+                  handleChange('items', [...value, option.create()]);
+                }}
+                leftIcon={<IconPlus size={16} />}
+                variant="default"
+                fullWidth
+              >
+                {translateDraggableList('buttonAdd')}
+              </Button>
+            </Flex>
+          </Stack>
         </Stack>
       );
     /* eslint-enable no-case-declarations */
