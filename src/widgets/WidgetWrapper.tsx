@@ -18,16 +18,21 @@ const useWidget = <T extends IWidget<string, any>>(widget: T): T => {
   const definition = Widgets[widget.type as keyof typeof Widgets];
 
   const newProps = { ...widget.properties };
+  const newToggled = { ...widget.toggled };
 
   Object.entries(definition.options).forEach(([key, option]) => {
     if (newProps[key] == null) {
       newProps[key] = option.defaultValue;
+    }
+    if (newToggled[key] == null && option.togglable) {
+      newToggled[key] = option.defaultToggle ?? false;
     }
   });
 
   return {
     ...widget,
     properties: newProps,
+    toggled: newToggled,
   };
 };
 

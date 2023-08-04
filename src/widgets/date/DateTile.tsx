@@ -37,7 +37,11 @@ interface DateTileProps {
 
 function DateTile({ widget }: DateTileProps) {
   const date = useDateState();
-  const formatString = widget.toggled.display24HourFormat && widget.properties.display24HourFormat ? 'HH:mm' : 'h:mm A';
+  console.log(widget);
+  const formatString =
+    widget.toggled.display24HourFormat && widget.properties.display24HourFormat
+      ? 'HH:mm'
+      : 'h:mm A';
   const { width, ref } = useElementSize();
 
   return (
