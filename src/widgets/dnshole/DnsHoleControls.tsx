@@ -79,7 +79,7 @@ function DnsHoleControlsWidgetTile({ widget }: DnsHoleControlsWidgetProps) {
     return list;
   };
 
-  const reFetchSumaryDns = () => {
+  const reFetchSummaryDns = () => {
     trpcUltils.dnsHole.summary.invalidate();
   };
   return (
@@ -92,7 +92,7 @@ function DnsHoleControlsWidgetTile({ widget }: DnsHoleControlsWidgetProps) {
               configName,
               currentEnabled: enabledDnsIds(),
             });
-            reFetchSumaryDns();
+            reFetchSummaryDns();
           }}
           leftIcon={<IconPlayerPlay size={20} />}
           variant="light"
@@ -108,7 +108,7 @@ function DnsHoleControlsWidgetTile({ widget }: DnsHoleControlsWidgetProps) {
               configName,
               currentEnabled: enabledDnsIds(),
             });
-            reFetchSumaryDns();
+            reFetchSummaryDns();
           }}
           leftIcon={<IconPlayerStop size={20} />}
           variant="light"
@@ -150,16 +150,12 @@ function DnsHoleControlsWidgetTile({ widget }: DnsHoleControlsWidgetProps) {
                         configName,
                         currentEnabled: enabledDnsIds(),
                       });
-                      reFetchSumaryDns();
+                      reFetchSummaryDns();
                     }}
                   >
                     <Badge
                       variant="dot"
-                      color={
-                        dnsLightStatus(fetchingDnsSumary || changingStatus, dnsHole.status)
-                        // changingStatus ? 'blue' : dnsHole.status === 'enabled' ? 'green' : 'red'
-                        // changingStatus ? 'blue' : dnsHole.status === 'enabled' ? 'green' : 'red'
-                      }
+                      color={dnsLightStatus(fetchingDnsSumary || changingStatus, dnsHole.status)}
                       styles={(theme) => ({
                         root: {
                           '&:hover': {
