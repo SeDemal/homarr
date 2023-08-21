@@ -41,8 +41,8 @@ interface DnsHoleControlsWidgetProps {
 }
 /**
  *
- * @param fetching - a expresion that return a boolean if the data is been fetched
- * @param currentStatus the current status of the dns integration, either enabled or disbaled
+ * @param fetching - a expression that return a boolean if the data is been fetched
+ * @param currentStatus the current status of the dns integration, either enabled or disabled
  * @returns
  */
 const dnsLightStatus = (
@@ -57,21 +57,21 @@ const dnsLightStatus = (
   }
   return 'red';
 };
+
 function DnsHoleControlsWidgetTile({ widget }: DnsHoleControlsWidgetProps) {
-  const { isInitialLoading, data, isFetching: fetchingDnsSumary } = useDnsHoleSummeryQuery();
+  const { isInitialLoading, data, isFetching: fetchingDnsSummary } = useDnsHoleSummeryQuery();
   const { mutateAsync, isLoading: changingStatus } = useDnsHoleControlMutation();
   const { width, ref } = useElementSize();
   const { t } = useTranslation('common');
-
   const { name: configName, config } = useConfigContext();
-
-  const trpcUltils = api.useContext();
+  const trpcUtils = api.useContext();
 
   if (isInitialLoading || !data || !configName) {
     return <WidgetLoading />;
   }
-  const enabledDnsIds = () => {
-    const list = data?.status.filter((dns) => dns.status === 'enabled').map((dns) => dns.appId);
+
+  const listDnsHoleIds = (status: 'enabled' | 'disabled') => {
+    const list = data?.status.filter((dns) => dns.status === status).map((dns) => dns.appId);
 
     if (list.length === 0) {
       return undefined;
@@ -80,8 +80,9 @@ function DnsHoleControlsWidgetTile({ widget }: DnsHoleControlsWidgetProps) {
   };
 
   const reFetchSummaryDns = () => {
-    trpcUltils.dnsHole.summary.invalidate();
-  };
+    trpcUtils.dnsHole.summary.fetch({configName: configName});
+  }
+
   return (
     <Stack justify="space-between" h={'100%'} spacing="0.25rem">
       <SimpleGrid ref={ref} cols={width > 275 ? 2 : 1} verticalSpacing="0.25rem" spacing="0.25rem">
@@ -90,10 +91,11 @@ function DnsHoleControlsWidgetTile({ widget }: DnsHoleControlsWidgetProps) {
             await mutateAsync({
               action: 'enable',
               configName,
-              currentEnabled: enabledDnsIds(),
+              ids: listDnsHoleIds('disabled'),
             });
             reFetchSummaryDns();
           }}
+          disabled={!listDnsHoleIds('disabled')}
           leftIcon={<IconPlayerPlay size={20} />}
           variant="light"
           color="green"
@@ -106,10 +108,11 @@ function DnsHoleControlsWidgetTile({ widget }: DnsHoleControlsWidgetProps) {
             await mutateAsync({
               action: 'disable',
               configName,
-              currentEnabled: enabledDnsIds(),
+              ids: listDnsHoleIds('enabled'),
             });
             reFetchSummaryDns();
           }}
+          disabled={!listDnsHoleIds('enabled')}
           leftIcon={<IconPlayerStop size={20} />}
           variant="light"
           color="red"
@@ -148,14 +151,14 @@ function DnsHoleControlsWidgetTile({ widget }: DnsHoleControlsWidgetProps) {
                       await mutateAsync({
                         action: dnsHole.status === 'enabled' ? 'disable' : 'enable',
                         configName,
-                        currentEnabled: enabledDnsIds(),
+                        ids: [app.id],
                       });
                       reFetchSummaryDns();
                     }}
                   >
                     <Badge
                       variant="dot"
-                      color={dnsLightStatus(fetchingDnsSumary || changingStatus, dnsHole.status)}
+                      color={dnsLightStatus(fetchingDnsSummary || changingStatus, dnsHole.status)}
                       styles={(theme) => ({
                         root: {
                           '&:hover': {

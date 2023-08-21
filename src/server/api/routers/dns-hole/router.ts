@@ -15,26 +15,27 @@ export const dnsHoleRouter = createTRPCRouter({
       z.object({
         action: z.enum(['enable', 'disable']),
         configName: z.string(),
-        currentEnabled: z.optional(z.array(z.string())),
+        ids: z.optional(z.array(z.string())),
       })
     )
     .mutation(async ({ input }) => {
       const config = getConfig(input.configName);
-      const { currentEnabled } = input;
+      const { ids } = input;
 
-      const applicableApps = config.apps.filter(
+      const apps = ids? config.apps.filter((x) => ids.includes(x.id)) : config.apps;
+
+      const applicableApps = apps.filter(
         (x) => x.integration?.type && ['pihole', 'adGuardHome'].includes(x.integration?.type)
       );
 
       await Promise.all(
         applicableApps.map(async (app) => {
           if (app.integration?.type === 'pihole') {
-            await processPiHole(app, input.action === 'enable', currentEnabled);
+            await processPiHole(app, input.action === 'enable');
 
             return;
           }
-
-          await processAdGuard(app, input.action === 'enable', currentEnabled);
+          await processAdGuard(app, input.action === 'enable');
         })
       );
     }),
@@ -84,7 +85,7 @@ export const dnsHoleRouter = createTRPCRouter({
     }),
 });
 
-const processAdGuard = async (app: ConfigAppType, enable: boolean, enabledApps?: string[]) => {
+const processAdGuard = async (app: ConfigAppType, enable: boolean) => {
   const adGuard = new AdGuard(
     app.url,
     findAppProperty(app, 'username'),
@@ -92,15 +93,11 @@ const processAdGuard = async (app: ConfigAppType, enable: boolean, enabledApps?:
   );
 
   if (enable) {
-    if (enabledApps?.includes(app.id)) {
-      return;
-    }
     try {
       await adGuard.enable();
-    } catch (error) {}
-    return;
-  }
-  if (!enabledApps?.includes(app.id)) {
+    } catch (error) {
+      Consola.error((error as Error).message)
+    }
     return;
   }
   try {
@@ -110,19 +107,15 @@ const processAdGuard = async (app: ConfigAppType, enable: boolean, enabledApps?:
   }
 };
 
-const processPiHole = async (app: ConfigAppType, enable: boolean, enabledApps?: string[]) => {
+const processPiHole = async (app: ConfigAppType, enable: boolean) => {
   const pihole = new PiHoleClient(app.url, findAppProperty(app, 'apiKey'));
 
   if (enable) {
-    if (enabledApps?.includes(app.id)) {
-      return;
-    }
     try {
       await pihole.enable();
-    } catch (error) {}
-    return;
-  }
-  if (!enabledApps?.includes(app.id)) {
+    } catch (error) {
+      Consola.error((error as Error).message)
+    }
     return;
   }
   try {
