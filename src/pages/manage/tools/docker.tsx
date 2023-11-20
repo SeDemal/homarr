@@ -47,6 +47,7 @@ export default function DockerPage({
 
   return (
     <ManageLayout>
+      <Title mb="lg">{t('title')}</Title>
       <Stack>
         <ContainerActionBar selected={selection} reload={reload} isLoading={isRefetching} />
         <ContainerTable containers={data ?? []} selection={selection} setSelection={setSelection} />

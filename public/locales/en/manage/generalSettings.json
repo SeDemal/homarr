@@ -1,0 +1,11 @@
+{
+  "metaTitle":"Settings",
+  "pageTitle":"General Settings",
+  "pageDescription":"This page concerns the general settings regarding your Homarr instance that could affect all the boards and pages.",
+  "settings":{
+    "analytics":{
+      "title":"Analytics",
+      "label":"Allow data to be sent to the homarr team to help improve the project."
+    }
+  }
+}

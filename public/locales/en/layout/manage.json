@@ -25,7 +25,8 @@
         "tools": {
             "title": "Tools",
             "items": {
-                "docker": "Docker"
+                "docker": "Docker",
+                "generalSettings":"General Settings"
             }
         },
         "about": {

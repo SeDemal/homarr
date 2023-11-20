@@ -8,20 +8,18 @@ import {
   Indicator,
   NavLink,
   Navbar,
-  Paper,
   Text,
-  ThemeIcon,
-  useMantineTheme,
+  ThemeIcon
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import {
+  IconAdjustmentsCog,
   IconBook2,
   IconBrandDiscord,
   IconBrandDocker,
   IconBrandGithub,
   IconGitFork,
   IconHome,
-  IconInfoCircle,
   IconInfoSmall,
   IconLayoutDashboard,
   IconMailForward,
@@ -29,7 +27,7 @@ import {
   IconTool,
   IconUser,
   IconUsers,
-  TablerIconsProps,
+  TablerIconsProps
 } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
@@ -103,6 +101,10 @@ export const ManageLayout = ({ children }: ManageLayoutProps) => {
         docker: {
           icon: IconBrandDocker,
           href: '/manage/tools/docker',
+        },
+        generalSettings: {
+          icon: IconAdjustmentsCog,
+          href: '/manage/tools/generalSettings',
         },
       },
     },
