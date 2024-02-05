@@ -11,6 +11,7 @@ import { iconRouter } from './routers/icon';
 import { inviteRouter } from './routers/invite/invite-router';
 import { mediaRequestsRouter } from './routers/media-request';
 import { mediaServerRouter } from './routers/media-server';
+import { mediaTranscodeRouter } from './routers/media-transcode';
 import { notebookRouter } from './routers/notebook';
 import { overseerrRouter } from './routers/overseerr';
 import { passwordRouter } from './routers/password';
@@ -39,6 +40,7 @@ export const rootRouter = createTRPCRouter({
   mediaRequest: mediaRequestsRouter,
   mediaServer: mediaServerRouter,
   overseerr: overseerrRouter,
+  mediaTranscode: mediaTranscodeRouter,
   usenet: usenetRouter,
   weather: weatherRouter,
   invites: inviteRouter,

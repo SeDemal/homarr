@@ -174,6 +174,11 @@ export const availableIntegrations = [
     label: 'Plex',
   },
   {
+    value: 'tdarr',
+    image: 'https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons@master/png/tdarr.png',
+    label: 'Tdarr',
+  },
+  {
     value: 'pihole',
     image: 'https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons@master/png/pi-hole.png',
     label: 'PiHole',

@@ -9,6 +9,7 @@ import iframe from './iframe/IFrameTile';
 import mediaRequestsList from './media-requests/MediaRequestListTile';
 import mediaRequestsStats from './media-requests/MediaRequestStatsTile';
 import mediaServer from './media-server/MediaServerTile';
+import mediaTranscodeList from './media-transcode/MediaTranscodeListTile';
 import notebook from './notebook/NotebookWidgetTile';
 import rss from './rss/RssWidgetTile';
 import smartHomeEntityState from './smart-home/entity-state/entity-state.widget';
@@ -32,6 +33,7 @@ export default {
   'media-server': mediaServer,
   'media-requests-list': mediaRequestsList,
   'media-requests-stats': mediaRequestsStats,
+  'media-transcode-list': mediaTranscodeList,
   'dns-hole-summary': dnsHoleSummary,
   'dns-hole-controls': dnsHoleControls,
   bookmark,

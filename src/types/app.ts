@@ -54,6 +54,7 @@ export type IntegrationType =
   | 'transmission'
   | 'plex'
   | 'jellyfin'
+  | 'tdarr'
   | 'nzbGet'
   | 'pihole'
   | 'adGuardHome'
@@ -96,6 +97,7 @@ export const integrationFieldProperties: {
   qBittorrent: ['username', 'password'],
   transmission: ['username', 'password'],
   jellyfin: ['username', 'password'],
+  tdarr: [],
   plex: ['apiKey'],
   pihole: ['apiKey'],
   adGuardHome: ['username', 'password'],
