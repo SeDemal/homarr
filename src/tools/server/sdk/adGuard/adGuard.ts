@@ -27,6 +27,10 @@ export class AdGuard {
       },
     });
 
+    if (response.status !== 200) {
+      throw new Error(`AdGuard stats; Status code does not indicate success: ${response.status}`);
+    }
+
     const data = await response.json();
 
     return adGuardApiStatsResponseSchema.parseAsync(data);
@@ -39,6 +43,10 @@ export class AdGuard {
       },
     });
 
+    if (response.status !== 200) {
+      throw new Error(`AdGuard status; Status code does not indicate success: ${response.status}`);
+    }
+
     const data = await response.json();
 
     return adGuardApiStatusResponseSchema.parseAsync(data);
@@ -50,6 +58,10 @@ export class AdGuard {
         Authorization: `Basic ${this.getAuthorizationHeaderValue()}`,
       },
     });
+
+    if (response.status !== 200) {
+      throw new Error(`AdGuard domain filters; Status code does not indicate success: ${response.status}`);
+    }
 
     const data = await response.json();
     const schemaData = await adGuardApiFilteringStatusSchema.parseAsync(data);
