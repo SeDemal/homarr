@@ -133,7 +133,8 @@ const processPiHole = async (app: ConfigAppType, enable: boolean) => {
 
 const collectPiHoleSummary = async (app: ConfigAppType) => {
   const piHole = new PiHoleClient(app.url, findAppProperty(app, 'apiKey'));
-  const summary = await piHole.getSummary().catch(() => {
+  const summary = await piHole.getSummary().catch((error) => {
+    console.log(`Error while fetching PiHole summary: ${error}`);
     return null;
   });
 
@@ -160,16 +161,23 @@ const collectAdGuardSummary = async (app: ConfigAppType) => {
     findAppProperty(app, 'password')
   );
 
-  const stats = await adGuard.getStats().catch(() => {
+  const stats = await adGuard.getStats().catch((error) => {
+    console.log(`Error while fetching AdGuard stats: ${error}`);
     return null;
   });
 
-  if (!stats) {
+  const status = await adGuard.getStatus().catch((error) => {
+    console.log(`Error while fetching AdGuard status: ${error}`);
+    return null;
+  });
+  const countFilteredDomains = await adGuard.getCountFilteringDomains().catch((error) => {
+    console.log(`Error while fetching AdGuard domain filters: ${error}`);
+    return null;
+  });
+
+  if (!stats || !status || !countFilteredDomains) {
     return null;
   }
-
-  const status = await adGuard.getStatus();
-  const countFilteredDomains = await adGuard.getCountFilteringDomains();
 
   const blockedQueriesToday =
     stats.time_units === 'days'
