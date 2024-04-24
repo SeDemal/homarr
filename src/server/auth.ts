@@ -4,13 +4,13 @@ import { type GetServerSidePropsContext, type NextApiRequest, type NextApiRespon
 import { type NextAuthOptions, getServerSession } from 'next-auth';
 import { Adapter } from 'next-auth/adapters';
 import { decode, encode } from 'next-auth/jwt';
+import { env } from '~/env';
 import { adapter, getProviders, onCreateUser } from '~/utils/auth';
 import { createRedirectUri } from '~/utils/auth/oidc';
 import EmptyNextAuthProvider from '~/utils/empty-provider';
 import { fromDate, generateSessionToken } from '~/utils/session';
 import { colorSchemeParser } from '~/validations/user';
 
-import { env } from '~/env';
 import { db } from './db';
 import { users } from './db/schema';
 
